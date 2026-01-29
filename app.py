@@ -1,4 +1,8 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 import torch
 import torch.nn as nn
 from torchvision import models, transforms
@@ -19,7 +23,7 @@ from urllib.parse import urlencode
 
 # --- Configuration ---
 app = Flask(__name__)
-app.config['SECRET_KEY'] = secrets.token_hex(16)
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') or secrets.token_hex(16)
 app.config['PERMANENT_SESSION_LIFETIME'] = 86400  # 24 hours
 UPLOAD_FOLDER = 'static/uploads'
 GENERATED_FOLDER = 'static/generated'
@@ -49,7 +53,7 @@ milestones_col.create_index([('reportId', ASCENDING)])
 milestones_col.create_index([('createdAt', ASCENDING)])
 
 # --- Gemini API Configuration ---
-GEMINI_API_KEY = ''
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key={GEMINI_API_KEY}"
 
 # --- Model Configuration ---
